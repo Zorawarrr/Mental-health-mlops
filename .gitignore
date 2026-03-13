@@ -1,0 +1,46 @@
+# Virtual Environments
+venv/
+env/
+.env
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.pytest_cache/
+htmlcov/
+dist/
+build/
+*.egg-info/
+.coverage
+coverage.xml
+
+# Node.js
+node_modules/
+dist/
+build/
+.npm
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Mac/Windows
+.DS_Store
+Thumbs.db
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Project Specific
+backend/__pycache__/
+backend/models/__pycache__/
+aurasense-ai/node_modules/
+aurasense-ai/dist/
+
+# Large Datasets
+data/*.csv
+data/*.pkl

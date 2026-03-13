@@ -1,0 +1,50 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: mental-health-backend
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./backend/models:/app/models
+    environment:
+      - PYTHONPATH=/app
+    networks:
+      - mental-health-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+  frontend:
+    build:
+      context: ./aurasense-ai
+      dockerfile: Dockerfile
+    container_name: mental-health-frontend
+    ports:
+      - "5173:80"
+    depends_on:
+      - backend
+    environment:
+      - VITE_API_URL=http://backend:8000
+    networks:
+      - mental-health-network
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+networks:
+  mental-health-network:
+    driver: bridge
+
+volumes:
+  models:
+    driver: local
