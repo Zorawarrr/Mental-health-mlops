@@ -55,8 +55,6 @@ coverage/
 *.temp
 
 # Docker
-Dockerfile
-docker-compose.yml
 .dockerignore
 
 
