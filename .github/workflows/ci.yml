@@ -1,0 +1,50 @@
+name: DeepSense CI/CD Pipeline
+
+on:
+  push:
+    branches: [ "main", "master" ]
+  pull_request:
+    branches: [ "main", "master" ]
+
+jobs:
+  build-and-test:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Code Repository
+      uses: actions/checkout@v4
+
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+
+    - name: Install Docker Compose
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y docker-compose
+
+    - name: Build Docker Containers
+      run: |
+        echo "Building the Backend FastAPI and React Frontend containers..."
+        docker-compose build
+
+    - name: Verify Containers Start Successfully
+      run: |
+        echo "Spinning up the containers in detached mode..."
+        docker-compose up -d
+        
+        echo "Waiting 10 seconds for services to initialize..."
+        sleep 10
+        
+        echo "Checking running containers:"
+        docker ps -a
+        
+        echo "Testing Backend API Health..."
+        curl -f http://localhost:8000/ || exit 1
+        
+        echo "Testing Frontend UI Health..."
+        curl -f http://localhost:5173/ || exit 1
+        
+    - name: Shut Down and Clean Up
+      if: always()
+      run: |
+        docker-compose down -v
