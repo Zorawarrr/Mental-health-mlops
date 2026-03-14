@@ -35,9 +35,9 @@ jobs:
         echo "Checking running containers:"
         docker ps -a
         
-        echo "Waiting for Backend to load 180MB ML Models (up to 60s)..."
+        echo "Waiting for Backend to load ML Models (up to 60s)..."
         for i in {1..12}; do
-          if curl -s -f http://localhost:8000/; then
+          if curl -s -f http://127.0.0.1:8000/; then
             echo -e "\nBackend is successfully running!"
             break
           fi
@@ -46,10 +46,10 @@ jobs:
         done
         
         echo "Final API Health Check..."
-        curl -f http://localhost:8000/ || exit 1
+        curl -f http://127.0.0.1:8000/ || (echo "API FAILED! Printing backend logs:" && docker logs mental-health-backend && exit 1)
         
         echo "Testing Frontend UI Health..."
-        curl -f http://localhost:5173/ || exit 1
+        curl -f http://127.0.0.1:5173/ || (echo "UI FAILED! Printing frontend logs:" && docker logs mental-health-frontend && exit 1)
         
     - name: Shut Down and Clean Up
       if: always()
