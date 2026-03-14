@@ -32,13 +32,20 @@ jobs:
         echo "Spinning up the containers in detached mode..."
         docker-compose up -d
         
-        echo "Waiting 10 seconds for services to initialize..."
-        sleep 10
-        
         echo "Checking running containers:"
         docker ps -a
         
-        echo "Testing Backend API Health..."
+        echo "Waiting for Backend to load 180MB ML Models (up to 60s)..."
+        for i in {1..12}; do
+          if curl -s -f http://localhost:8000/; then
+            echo -e "\nBackend is successfully running!"
+            break
+          fi
+          echo -n "."
+          sleep 5
+        done
+        
+        echo "Final API Health Check..."
         curl -f http://localhost:8000/ || exit 1
         
         echo "Testing Frontend UI Health..."
