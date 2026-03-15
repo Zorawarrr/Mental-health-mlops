@@ -21,9 +21,9 @@ const App = () => (
       <BrowserRouter>
         <Navbar />
         <Routes>
-          <Route path="/" element={<Navigate to="/test" replace />} />
+          <Route path="/" element={<Dashboard />} />
           <Route path="/test" element={<TestPage />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Navigate to="/" replace />} />
           <Route path="/analysis" element={<Analysis />} />
           <Route path="/model-insights" element={<ModelInsights />} />
           <Route path="/about" element={<About />} />
