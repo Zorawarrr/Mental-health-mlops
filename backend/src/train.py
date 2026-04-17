@@ -3,7 +3,6 @@ import torch.nn as nn
 from torch_geometric.nn import GCNConv, global_mean_pool
 from transformers import AutoModel, AutoTokenizer
 from torch_geometric.loader import DataLoader
-from sklearn.model_selection import train_test_split
 from src.preprocess import load_data, prepare_dataset
 import os
 import argparse
@@ -48,6 +47,7 @@ class HybridGNN(nn.Module):
         return self.classifier(fused)
 
 def train(epochs=2, max_samples=50000, batch_size=32):
+    from sklearn.model_selection import train_test_split
     print("Loading data...")
     df = load_data("data/sentiment140.csv", max_samples=max_samples)
     
