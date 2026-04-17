@@ -1,12 +1,7 @@
 pandas
 numpy
-scikit-learn
 fastapi
 uvicorn
-joblib
-mlflow
-evidently
-boto3
 python-multipart
 --extra-index-url https://download.pytorch.org/whl/cpu
 torch
