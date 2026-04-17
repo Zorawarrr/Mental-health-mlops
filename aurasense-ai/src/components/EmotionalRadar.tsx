@@ -26,18 +26,18 @@ const EmotionalRadar = ({ data = defaultData }: EmotionalRadarProps) => {
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart data={data} cx="50%" cy="50%" outerRadius="70%">
-            <PolarGrid stroke="hsl(180, 100%, 25%)" strokeDasharray="3 3" />
+            <PolarGrid stroke="rgba(0, 242, 255, 0.2)" strokeDasharray="3 3" />
             <PolarAngleAxis
               dataKey="subject"
-              tick={{ fill: "hsl(180, 100%, 75%)", fontSize: 11, fontWeight: 500 }}
+              tick={{ fill: "#00f2ff", fontSize: 12, fontWeight: 700 }}
             />
             <Tooltip
               content={({ active, payload }) => {
                 if (active && payload && payload.length) {
                   return (
-                    <div className="glass-morphism border border-primary/30 p-2 rounded-lg shadow-xl">
-                      <p className="text-[10px] uppercase tracking-wider text-muted-foreground font-bold mb-1">{payload[0].payload.subject}</p>
-                      <p className="text-sm font-black text-primary">{payload[0].value}% Confidence</p>
+                    <div className="bg-background/90 border border-[#00f2ff] p-3 rounded-xl shadow-[0_0_15px_rgba(0,242,255,0.3)]">
+                      <p className="text-[10px] uppercase tracking-widest text-[#00f2ff] font-black mb-1">{payload[0].payload.subject}</p>
+                      <p className="text-lg font-black text-white">{payload[0].value}%</p>
                     </div>
                   );
                 }
@@ -47,11 +47,11 @@ const EmotionalRadar = ({ data = defaultData }: EmotionalRadarProps) => {
             <Radar
               name="Emotional Metrics"
               dataKey="value"
-              stroke="var(--primary)"
-              fill="var(--primary)"
-              fillOpacity={0.2}
-              strokeWidth={2}
-              activeDot={{ r: 4, fill: "var(--primary)", stroke: "#fff", strokeWidth: 2 }}
+              stroke="#00f2ff"
+              fill="#00f2ff"
+              fillOpacity={0.4}
+              strokeWidth={3}
+              activeDot={{ r: 6, fill: "#00f2ff", stroke: "#fff", strokeWidth: 2 }}
               isAnimationActive={true}
               animationDuration={1000}
             />
