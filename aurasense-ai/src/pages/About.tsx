@@ -2,6 +2,7 @@ import { motion } from "framer-motion";
 import ParticleBackground from "@/components/ParticleBackground";
 import { Brain, Server, Layout, Shield, Code, Cpu } from "lucide-react";
 
+const techStack = [
   { name: "PyTorch + HuggingFace", description: "Deep learning libraries powering the Hybrid GNN and BERT embeddings", icon: Brain },
   { name: "FastAPI", description: "High-performance Python web framework for the prediction API", icon: Server },
   { name: "React + Tailwind", description: "Modern frontend stack with utility-first CSS", icon: Layout },
