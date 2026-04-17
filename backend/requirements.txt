@@ -8,3 +8,6 @@ mlflow
 evidently
 boto3
 python-multipart
+torch
+torch-geometric
+transformers
