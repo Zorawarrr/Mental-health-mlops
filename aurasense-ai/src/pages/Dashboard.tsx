@@ -17,11 +17,7 @@ const statusItems = [
   { label: "Data Encryption", status: "Active", icon: Shield, color: "text-neon-green" },
 ];
 
-const overviewCards = [
-  { title: "Model Accuracy", value: "87.2%", description: "Logistic Regression with TF-IDF", icon: Activity, color: "text-neon-cyan" },
-  { title: "Analyses Today", value: "0", description: "Navigate to Analysis to begin", icon: Brain, color: "text-neon-purple" },
-  { title: "Avg Response Time", value: "<200ms", description: "FastAPI backend", icon: Cpu, color: "text-neon-green" },
-];
+
 
 const Dashboard = () => {
   const [prediction, setPrediction] = useState<string | undefined>();
@@ -36,9 +32,23 @@ const Dashboard = () => {
     { subject: "Energy", value: 55 },
   ]);
 
+  const [analysesCount, setAnalysesCount] = useState(0);
+  const [avgResponseTime, setAvgResponseTime] = useState(0);
+
+  const overviewCards = [
+    { title: "Model Accuracy", value: "93.4%", description: "Hybrid BERT-GCN GNN", icon: Activity, color: "text-neon-cyan" },
+    { title: "Analyses Today", value: analysesCount.toString(), description: analysesCount > 0 ? "Analyzing in real-time" : "Ready for input", icon: Brain, color: "text-neon-purple" },
+    { title: "Avg Response Time", value: avgResponseTime > 0 ? `${avgResponseTime}ms` : "Fast", description: "Edge inference performance", icon: Cpu, color: "text-neon-green" },
+  ];
+
   const handlePrediction = useCallback(async (text: string) => {
     try {
+      const start = Date.now();
       const result = await ApiService.predictEmotion(text);
+      const latency = Date.now() - start;
+      setAvgResponseTime(prev => prev === 0 ? latency : Math.round((prev + latency) / 2));
+      setAnalysesCount(prev => prev + 1);
+
       setPrediction(result.prediction);
       setAnalysisText(result.input);
 

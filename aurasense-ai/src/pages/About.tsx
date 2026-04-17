@@ -2,9 +2,8 @@ import { motion } from "framer-motion";
 import ParticleBackground from "@/components/ParticleBackground";
 import { Brain, Server, Layout, Shield, Code, Cpu } from "lucide-react";
 
-const techStack = [
+  { name: "PyTorch + HuggingFace", description: "Deep learning libraries powering the Hybrid GNN and BERT embeddings", icon: Brain },
   { name: "FastAPI", description: "High-performance Python web framework for the prediction API", icon: Server },
-  { name: "Scikit-learn", description: "Machine learning library for model training and inference", icon: Brain },
   { name: "React + Tailwind", description: "Modern frontend stack with utility-first CSS", icon: Layout },
   { name: "Docker", description: "Containerized deployment for reproducibility", icon: Cpu },
 ];
@@ -68,7 +67,7 @@ const About = () => {
             </div>
             <ul className="space-y-3">
               {[
-                "Real-time text sentiment analysis using logistic regression",
+                "Real-time text sentiment analysis using Hybrid GNN (GCN + BERT)",
                 "Dynamic risk gauge visualization with animated transitions",
                 "Emotional radar chart mapping stress, anxiety, fatigue, mood, and energy",
                 "AI-generated insights with contextual recommendations",

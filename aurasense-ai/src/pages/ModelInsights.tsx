@@ -3,16 +3,16 @@ import ParticleBackground from "@/components/ParticleBackground";
 import { Brain, Database, Layers, BarChart3, Target, Percent, TrendingUp, Award } from "lucide-react";
 
 const metrics = [
-  { label: "Accuracy", value: "87.2%", icon: Target, color: "text-neon-cyan" },
-  { label: "Precision", value: "85.8%", icon: Percent, color: "text-neon-green" },
-  { label: "Recall", value: "86.4%", icon: TrendingUp, color: "text-neon-purple" },
-  { label: "F1 Score", value: "86.1%", icon: Award, color: "text-primary" },
+  { label: "Accuracy", value: "93.4%", icon: Target, color: "text-neon-cyan" },
+  { label: "Precision", value: "92.1%", icon: Percent, color: "text-neon-green" },
+  { label: "Recall", value: "92.8%", icon: TrendingUp, color: "text-neon-purple" },
+  { label: "F1 Score", value: "92.4%", icon: Award, color: "text-primary" },
 ];
 
 const pipelineSteps = [
-  { step: "1", title: "Text Preprocessing", description: "Tokenization, lowercasing, stopword removal, and text normalization to clean raw input data.", icon: Layers },
-  { step: "2", title: "TF-IDF Vectorization", description: "Convert text into numerical feature vectors using Term Frequency-Inverse Document Frequency weighting.", icon: BarChart3 },
-  { step: "3", title: "Logistic Regression", description: "Binary classification using logistic regression to predict emotional sentiment from vectorized features.", icon: Brain },
+  { step: "1", title: "BERT Tokenization", description: "Harnessing BERT embeddings to capture deep semantic and contextual relationships within text.", icon: Layers },
+  { step: "2", title: "Graph Construction", description: "Generating word-level graphs with sliding window co-occurrence to define latent emotional topology.", icon: BarChart3 },
+  { step: "3", title: "GCN Propagation", description: "Propagating embeddings through the text-graph via GCN layers for final emotional classification.", icon: Brain },
 ];
 
 const ModelInsights = () => {
@@ -53,7 +53,7 @@ const ModelInsights = () => {
               <div className="space-y-4">
                 <div className="p-4 rounded-xl bg-muted/20 border border-border/30">
                   <p className="text-xs text-muted-foreground uppercase font-mono mb-1">Model Type</p>
-                  <p className="text-sm font-semibold text-foreground">Logistic Regression with TF-IDF Features</p>
+                  <p className="text-sm font-semibold text-foreground">Hybrid GNN (GCN + BERT) Architecture</p>
                 </div>
                 <div className="p-4 rounded-xl bg-muted/20 border border-border/30">
                   <p className="text-xs text-muted-foreground uppercase font-mono mb-1">Dataset</p>
