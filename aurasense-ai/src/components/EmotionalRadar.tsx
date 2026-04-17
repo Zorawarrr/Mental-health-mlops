@@ -26,10 +26,10 @@ const EmotionalRadar = ({ data = defaultData }: EmotionalRadarProps) => {
       <div className="h-64">
         <ResponsiveContainer width="100%" height="100%">
           <RadarChart data={data} cx="50%" cy="50%" outerRadius="70%">
-            <PolarGrid stroke="rgba(255, 255, 255, 0.05)" />
+            <PolarGrid stroke="hsl(180, 100%, 25%)" strokeDasharray="3 3" />
             <PolarAngleAxis
               dataKey="subject"
-              tick={{ fill: "rgba(255, 255, 255, 0.5)", fontSize: 10, fontWeight: 500 }}
+              tick={{ fill: "hsl(180, 100%, 75%)", fontSize: 11, fontWeight: 500 }}
             />
             <Tooltip
               content={({ active, payload }) => {
