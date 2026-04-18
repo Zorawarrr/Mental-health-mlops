@@ -7,7 +7,7 @@ services:
       dockerfile: Dockerfile
     container_name: mental-health-backend
     ports:
-      - "9000:8000"
+      - "8000:8000"
     volumes:
       - ./backend/models:/app/models
     environment:
@@ -16,7 +16,7 @@ services:
       - mental-health-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:8000/"]
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/\")' || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -27,16 +27,14 @@ services:
       dockerfile: Dockerfile
     container_name: mental-health-frontend
     ports:
-      - "5173:80"
+      - "8080:80"
     depends_on:
       - backend
-    environment:
-      - VITE_API_URL=http://backend:8000
     networks:
       - mental-health-network
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:80"]
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:80 || exit 1"]
       interval: 30s
       timeout: 10s
       retries: 3

@@ -1,32 +1,35 @@
-# Build stage
+# ─── Stage 1: Build ───────────────────────────────────────────────────────────
 FROM node:18-alpine AS builder
 
-# Set working directory
 WORKDIR /app
 
-# Copy package files
-COPY package*.json ./
+# Copy only dependency manifests first (better layer caching)
+COPY package.json package-lock.json ./
 
-# Install dependencies
-RUN npm install
+# Install all dependencies (use --legacy-peer-deps to avoid peer conflict errors)
+RUN npm install --legacy-peer-deps
 
-# Copy source code
+# Copy the rest of the source code
 COPY . .
 
-# Build the application
+# Set the API URL for the production build – nginx will proxy /api → backend
+ENV VITE_API_URL=/api
+
+# Build the Vite app
 RUN npm run build
 
-# Production stage
-FROM nginx:alpine
+# ─── Stage 2: Serve ───────────────────────────────────────────────────────────
+FROM nginx:stable-alpine
 
-# Copy built application
+# Remove default nginx static content
+RUN rm -rf /usr/share/nginx/html/*
+
+# Copy the built app
 COPY --from=builder /app/dist /usr/share/nginx/html
 
-# Copy custom nginx config
+# Copy our custom nginx config (handles /api proxy + SPA routing)
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Expose port
 EXPOSE 80
 
-# Start nginx
 CMD ["nginx", "-g", "daemon off;"]

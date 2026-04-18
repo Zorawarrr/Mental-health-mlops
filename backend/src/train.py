@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch_geometric.nn import GCNConv, global_mean_pool
 from transformers import AutoModel, AutoTokenizer
 from torch_geometric.loader import DataLoader
-from src.preprocess import load_data, prepare_dataset
+from backend.src.preprocess import load_data, prepare_dataset
 import os
 import argparse
 import sys
@@ -21,8 +21,13 @@ class HybridGNN(nn.Module):
         self.conv2 = GCNConv(hidden_dim, hidden_dim)
         
         self.bert = AutoModel.from_pretrained(bert_model_name)
+        # Unfreeze top layers for fine-tuning
         for param in self.bert.parameters():
-            param.requires_grad = False # Freeze BERT for memory efficiency
+            param.requires_grad = False
+        
+        # Unfreeze last 2 layers
+        for param in self.bert.encoder.layer[-2:].parameters():
+            param.requires_grad = True
             
         bert_out_dim = self.bert.config.hidden_size
         
@@ -49,7 +54,10 @@ class HybridGNN(nn.Module):
 def train(epochs=2, max_samples=50000, batch_size=32):
     from sklearn.model_selection import train_test_split
     print("Loading data...")
-    df = load_data("data/sentiment140.csv", max_samples=max_samples)
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    root_dir = os.path.dirname(base_dir) # mental-health-mlops directory
+    data_path = os.path.join(root_dir, "data", "sentiment140.csv")
+    df = load_data(data_path, max_samples=max_samples)
     
     tokenizer = AutoTokenizer.from_pretrained('bert-base-uncased')
     
@@ -69,7 +77,8 @@ def train(epochs=2, max_samples=50000, batch_size=32):
     vocab_size = tokenizer.vocab_size
     model = HybridGNN(vocab_size=vocab_size, hidden_dim=64).to(device)
     
-    optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=2e-4)
+    # Lower learning rate for fine-tuning transformers
+    optimizer = torch.optim.Adam(filter(lambda p: p.requires_grad, model.parameters()), lr=2e-5)
     criterion = nn.CrossEntropyLoss()
     
     for epoch in range(epochs):
@@ -106,13 +115,19 @@ def train(epochs=2, max_samples=50000, batch_size=32):
         test_acc = test_correct / len(test_loader.dataset)
         print(f"Epoch {epoch+1}/{epochs} - Loss: {train_loss:.4f} | Train Acc: {train_acc:.4f} | Test Acc: {test_acc:.4f}")
         
-    os.makedirs("models", exist_ok=True)
+    base_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+    models_dir = os.path.join(base_dir, "models")
+    os.makedirs(models_dir, exist_ok=True)
+    
     # Save model
-    print("Saving model to models/hybrid_gnn.pt")
-    torch.save(model.state_dict(), "models/hybrid_gnn.pt")
+    model_path = os.path.join(models_dir, "hybrid_gnn.pt")
+    print(f"Saving model to {model_path}")
+    torch.save(model.state_dict(), model_path)
+    
     # Save vocab info
     import json
-    with open("models/config.json", "w") as f:
+    config_path = os.path.join(models_dir, "config.json")
+    with open(config_path, "w") as f:
         json.dump({"vocab_size": vocab_size, "hidden_dim": 64}, f)
         
     print("Training complete.")

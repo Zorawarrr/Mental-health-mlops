@@ -41,6 +41,17 @@ backend/models/__pycache__/
 aurasense-ai/node_modules/
 aurasense-ai/dist/
 
-# Large Datasets
+# Large Datasets and Models
 data/*.csv
 data/*.pkl
+backend/models/*.pt
+backend/models/*.pkl
+
+# Local Virtual Environments
+backend/venv_gnn/
+venv_gnn/
+
+# Logs and Scratch Files
+*.txt
+backend/scratch/
+train_hybrid_gnn.bat

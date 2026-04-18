@@ -20,7 +20,14 @@ def load_data(path, max_samples=None):
     df['label'] = df['sentiment'].apply(lambda x: 1 if x == 4 else 0)
     
     if max_samples:
-        df = df.sample(n=min(max_samples, len(df)), random_state=42).reset_index(drop=True)
+        neg_df = df[df['label'] == 0]
+        pos_df = df[df['label'] == 1]
+        
+        n_each = max_samples // 2
+        neg_sample = neg_df.sample(n=min(n_each, len(neg_df)), random_state=42)
+        pos_sample = pos_df.sample(n=min(n_each, len(pos_df)), random_state=42)
+        
+        df = pd.concat([neg_sample, pos_sample]).sample(frac=1, random_state=42).reset_index(drop=True)
     
     return df
 

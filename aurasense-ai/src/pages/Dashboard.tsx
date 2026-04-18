@@ -31,14 +31,14 @@ const Dashboard = () => {
     { subject: "Mood", value: 65 },
     { subject: "Energy", value: 55 },
   ]);
-
+  const [modelInfo, setModelInfo] = useState({ name: "Hybrid GNN", version: "1.2.0" });
   const [analysesCount, setAnalysesCount] = useState(0);
   const [avgResponseTime, setAvgResponseTime] = useState(0);
 
   const overviewCards = [
-    { title: "Model Accuracy", value: "93.4%", description: "Hybrid BERT-GCN GNN", icon: Activity, color: "text-neon-cyan" },
+    { title: "Model Accuracy", value: "93.4%", description: modelInfo.name, icon: Activity, color: "text-neon-cyan" },
     { title: "Analyses Today", value: analysesCount.toString(), description: analysesCount > 0 ? "Analyzing in real-time" : "Ready for input", icon: Brain, color: "text-neon-purple" },
-    { title: "Avg Response Time", value: avgResponseTime > 0 ? `${avgResponseTime}ms` : "Fast", description: "Edge inference performance", icon: Cpu, color: "text-neon-green" },
+    { title: "Avg Response Time", value: avgResponseTime > 0 ? `${avgResponseTime}ms` : "Real-time", description: "Edge inference latency", icon: Cpu, color: "text-neon-green" },
   ];
 
   const handlePrediction = useCallback(async (text: string) => {
@@ -46,6 +46,7 @@ const Dashboard = () => {
       const start = Date.now();
       const result = await ApiService.predictEmotion(text);
       const latency = Date.now() - start;
+      
       setAvgResponseTime(prev => prev === 0 ? latency : Math.round((prev + latency) / 2));
       setAnalysesCount(prev => prev + 1);
 
@@ -62,6 +63,10 @@ const Dashboard = () => {
       
       if (result.insight) {
         setInsightData(result.insight);
+      }
+
+      if (result.model_info) {
+        setModelInfo(result.model_info);
       }
     } catch (error) {
       console.error('Prediction failed:', error);

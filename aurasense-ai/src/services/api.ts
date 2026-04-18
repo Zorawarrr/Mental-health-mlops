@@ -1,4 +1,4 @@
-const API_BASE_URL = '/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL || '/api';
 
 export interface PredictionRequest {
   text: string;
@@ -14,6 +14,11 @@ export interface PredictionResponse {
     body: string;
     recommendations: string[];
     type: "positive" | "negative" | "neutral";
+  };
+  model_info?: {
+    name: string;
+    version: string;
+    latency_ms: number;
   };
 }
 
