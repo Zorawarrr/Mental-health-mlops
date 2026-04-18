@@ -50,8 +50,12 @@ backend/models/*.pkl
 # Local Virtual Environments
 backend/venv_gnn/
 venv_gnn/
+venv/
+env/
 
 # Logs and Scratch Files
 *.txt
 backend/scratch/
 train_hybrid_gnn.bat
+/api/index.py
+/api/__init__.py
