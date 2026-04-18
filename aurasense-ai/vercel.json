@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "http://3.90.212.244:9000/:path*"
+      "destination": "https://YOUR-RENDER-BACKEND-URL.onrender.com/:path*"
     },
     {
       "source": "/(.*)",
