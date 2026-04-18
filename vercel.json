@@ -4,7 +4,7 @@
   "rewrites": [
     {
       "source": "/api/:path*",
-      "destination": "https://mental-health-mlops.onrender.com/:path*"
+      "destination": "http://3.90.212.244:9000/:path*"
     },
     {
       "source": "/(.*)",
