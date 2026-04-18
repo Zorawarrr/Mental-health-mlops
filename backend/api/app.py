@@ -64,7 +64,7 @@ def predict(data:InputText):
         "insight": insight,
         "model_info": {
             "name": "Hybrid GNN (BERT + GCN)",
-            "version": "1.2.0",
+            "version": "1.3.0",
             "latency_ms": 0 
         }
     }
