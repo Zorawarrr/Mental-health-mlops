@@ -1,7 +1,11 @@
 import os
 os.environ["HF_HUB_DISABLE_PROGRESS_BARS"] = "1"
+os.environ["MALLOC_TRIM_THRESHOLD_"] = "100000"
 
 import torch
+# Limit threads to reduce memory footprint
+torch.set_num_threads(1)
+
 from transformers import AutoTokenizer
 from backend.src.preprocess import build_text_graph
 # Import from train or define it here if we want complete separation
@@ -59,6 +63,12 @@ def predict_text(text):
     prob_neg = float(probs[0])
     prob_pos = float(probs[1])
     
+    del batch
+    del out
+    del probs
+    import gc
+    gc.collect()
+
     # Quick calibration to fix the "all negative" issue
     # Boost positive probability if clear positive indicators are present
     pos_indicators = ['great', 'good', 'happy', 'better', 'hopeful', 'well', 'fine', 'awesome', 'excellent', 'excited', 'love', 'amazing', 'productive']
