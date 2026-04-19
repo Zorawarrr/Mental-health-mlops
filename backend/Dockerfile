@@ -15,10 +15,9 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 
 # Install Python dependencies
-# Using standard index for PyTorch, torch-geometric will build if wheels not available
 RUN pip install --no-cache-dir -r requirements.txt
 
-# Copy application files
+# Copy application files (excludes items in .dockerignore)
 COPY . /app/
 
 # Create models directory if it doesn't exist

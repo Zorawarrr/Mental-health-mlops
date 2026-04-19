@@ -3,7 +3,7 @@ import torch.nn as nn
 from torch_geometric.nn import GCNConv, global_mean_pool
 from transformers import AutoModel, AutoTokenizer
 from torch_geometric.loader import DataLoader
-from backend.src.preprocess import load_data, prepare_dataset
+from src.preprocess import load_data, prepare_dataset
 import os
 import argparse
 import sys

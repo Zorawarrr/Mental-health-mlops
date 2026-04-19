@@ -7,9 +7,9 @@ import torch
 torch.set_num_threads(1)
 
 from transformers import AutoTokenizer
-from backend.src.preprocess import build_text_graph
+from src.preprocess import build_text_graph
 # Import from train or define it here if we want complete separation
-from backend.src.train import HybridGNN
+from src.train import HybridGNN
 import json
 
 model = None
@@ -81,15 +81,24 @@ def predict_text(text):
         'great', 'good', 'happy', 'better', 'hopeful', 'well', 'fine', 'awesome', 
         'excellent', 'excited', 'love', 'amazing', 'productive', 'relaxed', 'calm',
         'content', 'joy', 'wonderful', 'safe', 'secure', 'supported', 'fantastic',
-        'okay', 'ok', 'not bad', 'peaceful', 'alright'
+        'okay', 'ok', 'not bad', 'peaceful', 'alright', 'positive', 'glad', 'pleasant',
+        'super', 'perfect', 'lovely', 'nice', 'cheer', 'smiling', 'bright'
     ]
     text_lower = text.lower()
     
+    # Use regex for whole-word matching to be more robust (e.g. catches "im happy")
+    import re
+    found_pos = False
+    for word in pos_indicators:
+        if re.search(rf'\b{re.escape(word)}\b', text_lower):
+            found_pos = True
+            break
+
     # Heuristic: If we find clear positive words, override the GNN if it's too negative
-    if any(word in text_lower for word in pos_indicators):
+    if found_pos:
         if prob_pos < 0.5:
             # We use a weighted boost rather than a hard override for better metrics
-            prob_pos = max(prob_pos, 0.72)
+            prob_pos = max(prob_pos, 0.75)
             prob_neg = 1.0 - prob_pos
             pred = 1
     elif prob_neg > 0.95: 

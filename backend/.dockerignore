@@ -1,0 +1,17 @@
+venv_gnn/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+env/
+venv/
+ENV/
+.env
+.git
+.gitignore
+.dockerignore
+error.txt
+error_trace.txt
+scratch/
+test_pred.py
